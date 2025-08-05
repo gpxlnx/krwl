@@ -18,8 +18,8 @@ CYAN='\e[36m'
 MAGENTA='\e[35m'
 NC='\e[0m' # No Color
 
-# ReconX00 - Recon Script for Bug Bounty (by @3$H4N$H)
-# Usage: ./reconx00.sh -d domain.com
+# ReconX00 - Recon Script for Bug Bounty (by @gpxlnx)
+# Usage: ./krwl.sh -d domain.com
 
 while getopts ":d:" input; do
   case "$input" in
@@ -278,6 +278,25 @@ echo -e "${GREEN}[+] Regexes Found From JavaScript: $(wc -l < secrets/js-leaked.
 echo -e "${YELLOW}[*] Starting Scraping Trufflehog-Secrets From JavaScripts Files ${NC}"
 cat juicy/js.txt | jsleak  -t "../secrets-patterns-db/datasets/trufflehog-v3.yml" -s | anew secrets/js-trufflehog.txt
 echo -e "${GREEN}[+] Trufflehog-Secrets Found From JavaScript: $(wc -l < secrets/js-leaked.txt)${NC}"
+
+### DB Patterns Detection (Novo)
+echo -e "${CYAN}[*] Starting Scrapping DB Patterns From JavaScript Files... ${NC}"
+
+echo -e "${YELLOW}[*] Starting Scraping PII From JavaScripts Files ${NC}"
+cat juicy/js.txt | jsleak -t "./secrets-patterns-db/db/pii-stable.yml" -s | anew secrets/js-pii.txt
+echo -e "${GREEN}[+] PII Found From JavaScript: $(wc -l < secrets/js-pii.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Scraping Sensitive Fields From JavaScripts Files ${NC}"
+cat juicy/js.txt | jsleak -t "./secrets-patterns-db/db/sensitive-fields-simple.yml" -s | anew secrets/js-sensitive-fields.txt
+echo -e "${GREEN}[+] Sensitive Fields Found From JavaScript: $(wc -l < secrets/js-sensitive-fields.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Scraping Stable Rules From JavaScripts Files ${NC}"
+cat juicy/js.txt | jsleak -t "./secrets-patterns-db/db/rules-stable.yml" -s | anew secrets/js-stable-rules.txt
+echo -e "${GREEN}[+] Stable Rules Found From JavaScript: $(wc -l < secrets/js-stable-rules.txt)${NC}"
+
+echo -e "${YELLOW}[*] Starting Scraping Full Sensitive Fields From JavaScripts Files ${NC}"
+cat juicy/js.txt | jsleak -t "./secrets-patterns-db/db/sensitive-fields-full.yml" -s | anew secrets/js-sensitive-fields-full.txt
+echo -e "${GREEN}[+] Full Sensitive Fields Found From JavaScript: $(wc -l < secrets/js-sensitive-fields-full.txt)${NC}"
 
 
 echo "[✔] Recon Complete! Results of $domain"
