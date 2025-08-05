@@ -1,7 +1,0 @@
-# config.txt
-
-# Configuration files and API keys
-export GITHUB_TOKEN=""
-export GITLAB_TOKEN=""
-export SHODAN_API_KEY=""
-export CHAOS_API_KEY=""
